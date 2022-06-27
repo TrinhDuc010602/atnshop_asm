@@ -124,17 +124,25 @@ app.post('/update', async (req, res) => {
     const price = req.body.txtPrice
     const image = req.body.txtImage
     const category = req.body.txtCategory
-    let updateValues = {
-        $set: {
-            name: name,
-            price: price,
-            category: category,
-            image: image
-        }
-    };
-        await updateDocument(id, updateValues, "Products")
-        res.redirect('/')
-
+    if (isNaN(price)) {
+        res.render('insert', {
+            nameError: null,
+            priceError: "Only Number"
+        });
+        return false;
+    }
+    else {
+        let updateValues = {
+            $set: {
+                name: name,
+                price: price,
+                category: category,
+                image: image
+            }
+        };
+            await updateDocument(id, updateValues, "Products")
+            res.redirect('/')
+    }
 })
 app.get('/sapxeptang',async (req,res)=>{
     const sapxep= await SortupPrice("Products")
